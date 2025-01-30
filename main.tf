@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("file.json")
+  
   region = "us-central1"
   zone = "us-central1-a"
   
