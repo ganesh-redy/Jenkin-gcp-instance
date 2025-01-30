@@ -1,5 +1,5 @@
 provider "google" {
-  
+  project = "mythic-inn-420620"
   region = "us-central1"
   zone = "us-central1-a"
   
