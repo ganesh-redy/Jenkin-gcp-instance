@@ -1,0 +1,58 @@
+pipeline {
+    agent any  // Runs the pipeline on any available agent
+
+    environment {
+        GCP_CREDENTIALS = credentials('gcp-sa-key')  // Load GCP Service Account JSON from Jenkins credentials
+        PROJECT_ID = 'mythic-inn-420620'  // Set Google Cloud Project ID
+        REGION = 'us-central1'
+        ZONE = 'us-central1-a'
+        BUCKET_NAME = 'okay-multi-multi'  // Google Cloud Storage bucket for Terraform state
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-repo.git'
+            }
+        }
+
+        stage('Authenticate with GCP') {
+            steps {
+                sh 'echo $GCP_CREDENTIALS > gcp-key.json'
+                sh 'gcloud auth activate-service-account --key-file=gcp-key.json'
+                sh 'gcloud config set project $PROJECT_ID'
+            }
+        }
+
+        stage('Setup Terraform') {
+            steps {
+                sh 'terraform init -backend-config="bucket=${BUCKET_NAME}"'  
+                // Initializes Terraform, using a remote backend in GCS
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'  
+                // Generates an execution plan to preview changes
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                input message: 'Proceed with Terraform Apply?', ok: 'Yes'
+                sh 'terraform apply -auto-approve'  
+                // Applies Terraform changes to create the VM
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'VM created successfully in GCP!'  // Success message
+        }
+        failure {
+            echo 'VM creation failed.'  // Failure message
+        }
+    }
+}
