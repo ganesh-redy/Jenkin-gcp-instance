@@ -10,7 +10,7 @@ resource "google_compute_instance" "terra" {
     machine_type = "e-micro"
     boot_disk {
       initialize_params {
-        image = "centos-stream-"
+        image = "centos-stream-9"
       }
     }
     network_interface {
