@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-     GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-sa')
+     GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-key')
   }
   stages {
      stage ("connecting to git") {
