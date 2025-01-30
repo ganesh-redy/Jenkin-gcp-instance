@@ -6,8 +6,8 @@ provider "google" {
 }
 
 resource "google_compute_instance" "terra" {
-    name="jenkins"
-    machine_type = "e-micro"
+    name="jenkins1"
+    machine_type = "e2-micro"
     boot_disk {
       initialize_params {
         image = "centos-stream-9"
