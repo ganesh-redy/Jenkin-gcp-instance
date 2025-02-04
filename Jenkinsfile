@@ -6,7 +6,7 @@ pipeline {
   stages {
      stage ("connecting to git") {
         steps{
-          git branch : "main", url : "https://github.com/ganesh-redy/Jenkin-gcp-instance.git"
+          git branch : "main", url : "https://github.com/ganesh-redy/instance-template.git"
         }
     }
 
